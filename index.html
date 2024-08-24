@@ -7,206 +7,208 @@
     <title>Everdell Custom Card Creator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'UnicaDis';
-            src: url('./fonts/UnicaDis.woff') format('woff');
-        }
+@font-face {
+    font-family: 'UnicaDis';
+    src: url('./fonts/UnicaDis.woff') format('woff');
+}
 
-        @font-face {
-            font-family: 'Plantin Infant MT Std';
-            src: url('./fonts/Plantin Infant MT Std Italic.woff') format('woff');
-        }
+@font-face {
+    font-family: 'Plantin Infant MT Std';
+    src: url('./fonts/Plantin Infant MT Std Italic.woff') format('woff');
+}
 
-        body {
-            background-color: #f8f9fa;
-            color: #5c3410;
-        }
+body {
+    background-color: #f8f9fa;
+    color: #5c3410;
+}
 
-        .container-fluid {
-            max-width: 1200px;
-        }
+.container-fluid {
+    max-width: 1200px;
+}
 
-        h1,
-        h2,
-        .form-label {
-            font-family: 'UnicaDis', sans-serif;
-            color: #2c1708;
-        }
+h1, h2, .form-label {
+    font-family: 'UnicaDis', sans-serif;
+    color: #2c1708;
+}
 
-        .form-text {
-            font-family: 'Plantin Infant MT Std', serif;
-            font-style: italic;
-            color: #5c3410;
-        }
+.form-text {
+    font-family: 'Plantin Infant MT Std', serif;
+    font-style: italic;
+    color: #5c3410;
+}
 
-        .card {
-            background-color: #fff9e6;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
+.card {
+    background-color: #fff9e6;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
 
-        .card-header {
-            background-color: #ebcd9c;
-            border-bottom: none;
-            border-radius: 15px 15px 0 0 !important;
-        }
+.card-header {
+    background-color: #ebcd9c;
+    border-bottom: none;
+    border-radius: 15px 15px 0 0 !important;
+}
 
-        .btn-group-toggle .btn {
-            min-width: 100px;
-            background-color: #ebcd9c;
-            border-color: #d4a76a;
-            color: #5c3410;
-        }
+.btn-primary {
+    background-color: #5c3410;
+    border-color: #5c3410;
+}
 
-        .btn-group-toggle .btn:hover,
-        .btn-group-toggle .btn:focus {
-            background-color: #d4a76a;
-        }
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #2c1708;
+    border-color: #2c1708;
+}
 
-        .btn-group-toggle .btn.active {
-            background-color: #b38648;
-            color: #fff;
-        }
+.form-control,
+.form-select {
+    border-color: #d4a76a;
+}
 
-        .btn-primary {
-            background-color: #5c3410;
-            border-color: #5c3410;
-        }
+.form-control:focus,
+.form-select:focus {
+    border-color: #5c3410;
+    box-shadow: 0 0 0 0.25rem rgba(179, 134, 72, 0.25);
+}
 
-        .btn-primary:hover,
-        .btn-primary:focus {
-            background-color: #2c1708;
-            border-color: #2c1708;
-        }
+.number-input {
+    width: 120px;
+}
 
-        .form-control,
-        .form-select {
-            border-color: #d4a76a;
-        }
+.card-preview-container {
+    position: relative;
+    width: 544px;
+    height: 741px;
+    margin: 0 auto;
+    max-width: 100%;
+}
 
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #b38648;
-            box-shadow: 0 0 0 0.25rem rgba(179, 134, 72, 0.25);
-        }
+#cardPreview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
-        .number-input {
-            width: 120px;
-        }
+.card-overlay {
+    position: absolute;
+    top: 22px;
+    left: 22px;
+    width: 502px;
+    height: 699px;
+    border: 1px solid #5c3410;
+    border-radius: 26px;
+    z-index: 2;
+    pointer-events: none;
+}
 
-        .card-preview-container {
-            position: relative;
-            width: 270px;
-            height: 370px;
-            margin: 0 auto;
-        }
+.slider-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
-        #cardPreview {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
+.slider-container input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
 
-        .card-overlay {
-            position: absolute;
-            top: 22px;
-            left: 22px;
-            width: 502px;
-            height: 699px;
-            border: 1px solid #5c3410;
-            border-radius: 26px;
-            z-index: 2;
-            pointer-events: none;
-        }
+.slider-container span {
+    min-width: 30px;
+}
 
-        .slider-container {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
+/* Button toggle group styles */
+.btn-group-toggle {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+}
 
-        .slider-container input {
-            flex-grow: 1;
-            margin-right: 10px;
-        }
+.btn-group-toggle .btn {
+    flex: 1 1 0;
+    padding: 0.375rem 0.1rem;
+    font-size: 0.9rem;
+    min-width: 0;
+    background-color: #ebcd9c;
+    border-color: #5c3410;
+    color: #5c3410;
+}
 
-        .slider-container span {
-            min-width: 30px;
-        }
+.btn-group-toggle .btn:hover,
+.btn-group-toggle .btn:focus {
+    background-color: #d4a76a;
+    border-color: #5c3410;
+    color: #5c3410;
+}
 
-        .btn-group-toggle .btn {
-            min-width: 100px;
-            background-color: #ebcd9c;
-            border-color: #d4a76a;
-            color: #5c3410;
-        }
+.btn-group-toggle .btn-check:checked + .btn,
+.btn-group-toggle .btn.active,
+.btn-group-toggle .btn.show,
+.btn-group-toggle .btn:first-child:active,
+.btn-group-toggle :not(.btn-check) + .btn:active {
+    background-color: #5c3410;
+    border-color: #5c3410;
+    color: #fff;
+}
 
-        .btn-group-toggle .btn:hover,
-        .btn-group-toggle .btn:focus {
-            background-color: #d4a76a;
-        }
+.btn-check:checked + .btn-outline-primary,
+.btn-check:active + .btn-outline-primary,
+.btn-outline-primary:active,
+.btn-outline-primary.active,
+.btn-outline-primary.dropdown-toggle.show {
+    background-color: #5c3410;
+    border-color: #5c3410;
+    color: #fff;
+}
 
-        .btn-group-toggle .btn.active {
-            background-color: #5c3410;
-            color: #fff;
-        }
+.btn-outline-primary:hover {
+    background-color: #d4a76a;
+    border-color: #5c3410;
+    color: #5c3410;
+}
 
-        .card-preview-container {
-            position: relative;
-            width: 544px;
-            height: 741px;
-            margin: 0 auto;
-            overflow: hidden;
-        }
+.btn-icon {
+    display: none;
+    width: 24px;
+    height: 24px;
+}
 
-        #cardPreview {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
+.btn-text {
+    display: inline;
+}
 
-        .card-overlay {
-            position: absolute;
-            top: 22px;
-            /* (370 - 352) / 2 = 9 */
-            left: 22px;
-            /* (270 - 254) / 2 = 8 */
-            width: 502px;
-            height: 699px;
-            border: 1px solid #5c3410;
-            border-radius: 26px;
-            z-index: 2;
-            pointer-events: none;
-        }
+/* Responsive styles for button toggle group */
+@media (max-width: 540px) {
+    .btn-group-toggle {
+        max-width: 540px;
+    }
 
-        .btn-group-toggle .btn {
-            min-width: 100px;
-            background-color: #ebcd9c;
-            border-color: #d4a76a;
-            color: #5c3410;
-        }
+    .btn-group-toggle .btn {
+        padding: 0.25rem 0.1rem;
+    }
 
-        .btn-group-toggle .btn:hover,
-        .btn-group-toggle .btn:focus {
-            background-color: #d4a76a;
-        }
+    .btn-icon {
+        display: inline-block;
+    }
 
-        .btn-group-toggle .btn-check:checked+.btn,
-        .btn-group-toggle .btn.active {
-            background-color: #5c3410;
-            border-color: #5c3410;
-            color: #fff;
-        }
+    .btn-text {
+        display: none;
+    }
+}
 
-        .btn-group-toggle .btn-check:focus+.btn,
-        .btn-group-toggle .btn:focus {
-            box-shadow: 0 0 0 0.25rem rgba(92, 52, 16, 0.25);
-        }
+/* Ensure buttons don't shrink too much on very small screens */
+@media (max-width: 350px) {
+    .btn-group-toggle .btn {
+        flex: 0 0 auto;
+        width: 20%;
+    }
+}
     </style>
 </head>
 
@@ -276,15 +278,30 @@
                                 <label class="form-label">Type</label>
                                 <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
                                     <input type="radio" class="btn-check" name="type" id="production" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary" for="production">Production</label>
+                                    <label class="btn btn-outline-primary" for="production">
+                                        <img src="./rules/production.png" alt="Production" class="btn-icon">
+                                        <span class="btn-text">Production</span>
+                                    </label>
                                     <input type="radio" class="btn-check" name="type" id="traveller" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="traveller">Traveller</label>
+                                    <label class="btn btn-outline-primary" for="traveller">
+                                        <img src="./rules/traveller.png" alt="Traveller" class="btn-icon">
+                                        <span class="btn-text">Traveller</span>
+                                    </label>
                                     <input type="radio" class="btn-check" name="type" id="prosperity" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="prosperity">Prosperity</label>
+                                    <label class="btn btn-outline-primary" for="prosperity">
+                                        <img src="./rules/prosperity.png" alt="Prosperity" class="btn-icon">
+                                        <span class="btn-text">Prosperity</span>
+                                    </label>
                                     <input type="radio" class="btn-check" name="type" id="destination" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="destination">Destination</label>
+                                    <label class="btn btn-outline-primary" for="destination">
+                                        <img src="./rules/destination.png" alt="Destination" class="btn-icon">
+                                        <span class="btn-text">Destination</span>
+                                    </label>
                                     <input type="radio" class="btn-check" name="type" id="governance" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="governance">Governance</label>
+                                    <label class="btn btn-outline-primary" for="governance">
+                                        <img src="./rules/governance.png" alt="Governance" class="btn-icon">
+                                        <span class="btn-text">Governance</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -506,7 +523,6 @@
             </div>
         </div>
     </div>
-    y>
 
 </html>
 
@@ -958,27 +974,33 @@ async function drawIcon(iconName, x, y) {
 }
 
 function downloadCanvas() {
-    // Convert the canvas to a data URL
-    const dataURL = canvas.toDataURL('image/png');
+            // The canvas already contains the full-quality image, so we can use it directly
+            const dataURL = canvas.toDataURL('image/png');
 
-    // Create a temporary link element
-    const downloadElement = document.createElement('a');
+            // Create a temporary link element
+            const downloadElement = document.createElement('a');
 
-    // Set the href to the canvas data URL
-    downloadElement.href = dataURL;
+            // Set the href to the canvas data URL
+            downloadElement.href = dataURL;
 
-    // Set the download attribute with the desired file name
-    downloadElement.download = 'custom_card.png';
+            // Set the download attribute with the desired file name
+            downloadElement.download = 'custom_card.png';
 
-    // Append the link to the body
-    document.body.appendChild(downloadElement);
+            // Append the link to the body
+            document.body.appendChild(downloadElement);
 
-    // Programmatically click the link to trigger the download
-    downloadElement.click();
+            // Programmatically click the link to trigger the download
+            downloadElement.click();
 
-    // Remove the link from the body
-    document.body.removeChild(downloadElement);
-}
+            // Remove the link from the body
+            document.body.removeChild(downloadElement);
+        }
+
+        // Add event listener for window resize
+        window.addEventListener('resize', resizeCanvasForDisplay);
+
+        // Call resizeCanvasForDisplay on initial load
+        window.addEventListener('load', resizeCanvasForDisplay);
 
 document.getElementById('downloadLink').addEventListener('click', downloadCanvas);
 
@@ -1469,7 +1491,12 @@ async function addPoints(vps) {
         await placeScaledImage('./points/-2.png');
     }
 }
+
 async function generateCard(data) {
+            // Get the original canvas dimensions
+    const originalWidth = canvas.width;
+    const originalHeight = canvas.height;
+
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -1479,8 +1506,32 @@ async function generateCard(data) {
 
     canvas.style.visibility = 'visible';
 
-    //updateDownloadLink();
+    // Resize the canvas for display
+    resizeCanvasForDisplay();
 }
+
+// Add this new function to handle canvas resizing
+function resizeCanvasForDisplay() {
+    const container = document.querySelector('.card-preview-container');
+    const aspectRatio = canvas.width / canvas.height;
+    const containerWidth = container.clientWidth;
+    const containerHeight = containerWidth / aspectRatio;
+
+    canvas.style.width = `${containerWidth}px`;
+    canvas.style.height = `${containerHeight}px`;
+
+    const scaleFactor = containerWidth / 544;
+
+    // Update the card-overlay size
+    const overlay = document.querySelector('.card-overlay');
+    overlay.style.top = `${22 * scaleFactor}px`;
+    overlay.style.left = `${22 * scaleFactor}px`;
+    overlay.style.width = `${502 * scaleFactor}px`;
+    overlay.style.height = `${699 * scaleFactor}px`;
+    overlay.style.borderRadius = `${26 * scaleFactor}px`;
+}
+
+
 
 // Initial update
 updateJSON();
