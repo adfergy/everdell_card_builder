@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everdell Custom Card Creator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'UnicaDis';
+            src: url('./fonts/UnicaDis.woff') format('woff');
+        }
+
+        @font-face {
+            font-family: 'Plantin Infant MT Std';
+            src: url('./fonts/Plantin Infant MT Std Italic.woff') format('woff');
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #5c3410;
+        }
+
+        .container-fluid {
+            max-width: 1200px;
+        }
+
+        h1,
+        h2,
+        .form-label {
+            font-family: 'UnicaDis', sans-serif;
+            color: #2c1708;
+        }
+
+        .form-text {
+            font-family: 'Plantin Infant MT Std', serif;
+            font-style: italic;
+            color: #5c3410;
+        }
+
+        .card {
+            background-color: #fff9e6;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: #ebcd9c;
+            border-bottom: none;
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .btn-group-toggle .btn {
+            min-width: 100px;
+            background-color: #ebcd9c;
+            border-color: #d4a76a;
+            color: #5c3410;
+        }
+
+        .btn-group-toggle .btn:hover,
+        .btn-group-toggle .btn:focus {
+            background-color: #d4a76a;
+        }
+
+        .btn-group-toggle .btn.active {
+            background-color: #b38648;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #5c3410;
+            border-color: #5c3410;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #2c1708;
+            border-color: #2c1708;
+        }
+
+        .form-control,
+        .form-select {
+            border-color: #d4a76a;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #b38648;
+            box-shadow: 0 0 0 0.25rem rgba(179, 134, 72, 0.25);
+        }
+
+        .number-input {
+            width: 120px;
+        }
+
+        .card-preview-container {
+            position: relative;
+            width: 270px;
+            height: 370px;
+            margin: 0 auto;
+        }
+
+        #cardPreview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 22px;
+            left: 22px;
+            width: 502px;
+            height: 699px;
+            border: 1px solid #5c3410;
+            border-radius: 26px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .slider-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .slider-container input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .slider-container span {
+            min-width: 30px;
+        }
+
+        .btn-group-toggle .btn {
+            min-width: 100px;
+            background-color: #ebcd9c;
+            border-color: #d4a76a;
+            color: #5c3410;
+        }
+
+        .btn-group-toggle .btn:hover,
+        .btn-group-toggle .btn:focus {
+            background-color: #d4a76a;
+        }
+
+        .btn-group-toggle .btn.active {
+            background-color: #5c3410;
+            color: #fff;
+        }
+
+        .card-preview-container {
+            position: relative;
+            width: 544px;
+            height: 741px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        #cardPreview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 22px;
+            /* (370 - 352) / 2 = 9 */
+            left: 22px;
+            /* (270 - 254) / 2 = 8 */
+            width: 502px;
+            height: 699px;
+            border: 1px solid #5c3410;
+            border-radius: 26px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .btn-group-toggle .btn {
+            min-width: 100px;
+            background-color: #ebcd9c;
+            border-color: #d4a76a;
+            color: #5c3410;
+        }
+
+        .btn-group-toggle .btn:hover,
+        .btn-group-toggle .btn:focus {
+            background-color: #d4a76a;
+        }
+
+        .btn-group-toggle .btn-check:checked+.btn,
+        .btn-group-toggle .btn.active {
+            background-color: #5c3410;
+            border-color: #5c3410;
+            color: #fff;
+        }
+
+        .btn-group-toggle .btn-check:focus+.btn,
+        .btn-group-toggle .btn:focus {
+            box-shadow: 0 0 0 0.25rem rgba(92, 52, 16, 0.25);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid mt-3">
+        <h1 class="text-center mb-4">Everdell Custom Card Creator</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <form id="cardForm">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h2 class="mb-0">Card Basics</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="title">
+                            </div>
+                            <div class="mb-3">
+                                <label for="victoryPoints" class="form-label">Victory Points</label>
+                                <select class="form-select" id="victoryPoints">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">*</option>
+                                    <option value="-2">-2</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="copies" class="form-label">Copies</label>
+                                <div class="input-group number-input">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('copies', -1)">-</button>
+                                    <input type="number" class="form-control text-center" id="copies" min="2" max="3" value="2">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('copies', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h2 class="mb-0">Card Type</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Rarity</label>
+                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                                    <input type="radio" class="btn-check" name="rarity" id="common" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="common">Common</label>
+                                    <input type="radio" class="btn-check" name="rarity" id="unique" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="unique">Unique</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Card Type</label>
+                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                                    <input type="radio" class="btn-check" name="cardType" id="critter" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="critter">Critter</label>
+                                    <input type="radio" class="btn-check" name="cardType" id="construction" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="construction">Construction</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Type</label>
+                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                                    <input type="radio" class="btn-check" name="type" id="production" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="production">Production</label>
+                                    <input type="radio" class="btn-check" name="type" id="traveller" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="traveller">Traveller</label>
+                                    <input type="radio" class="btn-check" name="type" id="prosperity" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="prosperity">Prosperity</label>
+                                    <input type="radio" class="btn-check" name="type" id="destination" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="destination">Destination</label>
+                                    <input type="radio" class="btn-check" name="type" id="governance" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="governance">Governance</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add a new section for Prosperity options -->
+                    <div id="prosperityOptions" style="display: none;">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h2 class="mb-0">Prosperity Options</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="prosperityReward" class="form-label">Reward</label>
+                                    <div class="input-group number-input">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('prosperityReward', -1)">-</button>
+                                        <input type="number" class="form-control text-center" id="prosperityReward" min="1" max="4" value="1">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('prosperityReward', 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="destinationOptions" style="display: none;">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h2 class="mb-0">Destination Options</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Open/Closed</label>
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                                        <input type="radio" class="btn-check" name="openClosed" id="open" autocomplete="off" checked>
+                                        <label class="btn btn-outline-primary" for="open">Open</label>
+                                        <input type="radio" class="btn-check" name="openClosed" id="closed" autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="closed">Closed</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Worker/Frog Ambassador</label>
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                                        <input type="radio" class="btn-check" name="workerFrog" id="worker" autocomplete="off" checked>
+                                        <label class="btn btn-outline-primary" for="worker">Worker</label>
+                                        <input type="radio" class="btn-check" name="workerFrog" id="frogAmbassador" autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="frogAmbassador">Frog Ambassador</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="critterOptions">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h2 class="mb-0">Critter Options</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="berryCost" class="form-label">Cost (Berries)</label>
+                                    <div class="input-group number-input">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('berryCost', -1)">-</button>
+                                        <input type="number" class="form-control text-center" id="berryCost" min="1" max="6" value="1">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('berryCost', 1)">+</button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="linkedConstruction" class="form-label">Linked Construction</label>
+                                    <input type="text" class="form-control" id="linkedConstruction">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="quote" class="form-label">Quote</label>
+                                    <input type="text" class="form-control" id="quote">
+                                    <div class="form-text">Use "|" to toggle bold text. Example: "The |quick| brown
+                                        |fox|"</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="constructionOptions" style="display: none;">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h2 class="mb-0">Construction Options</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Cost</label>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="twigsCost" class="form-label">Twigs</label>
+                                            <div class="input-group number-input">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('twigsCost', -1)">-</button>
+                                                <input type="number" class="form-control text-center" id="twigsCost" min="0" max="4" value="0">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('twigsCost', 1)">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <label for="resinCost" class="form-label">Resin</label>
+                                            <div class="input-group number-input">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('resinCost', -1)">-</button>
+                                                <input type="number" class="form-control text-center" id="resinCost" min="0" max="4" value="0">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('resinCost', 1)">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <label for="pebbleCost" class="form-label">Pebble</label>
+                                            <div class="input-group number-input">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('pebbleCost', -1)">-</button>
+                                                <input type="number" class="form-control text-center" id="pebbleCost" min="0" max="4" value="0">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="adjustNumber('pebbleCost', 1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="linkedCritter" class="form-label">Linked Critter</label>
+                                    <input type="text" class="form-control" id="linkedCritter">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="critterImageUpload" class="form-label">Linked Critter Image</label>
+                                    <input type="file" class="form-control" id="critterImageUpload" accept="image/*">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Critter Image X Offset</label>
+                                    <div class="slider-container">
+                                        <input type="range" class="form-range" id="critterXOffset" min="-300" max="300" value="0">
+                                        <span id="critterXOffsetValue">0</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Critter Image Y Offset</label>
+                                    <div class="slider-container">
+                                        <input type="range" class="form-range" id="critterYOffset" min="-300" max="300" value="0">
+                                        <span id="critterYOffsetValue">0</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Critter Image Scale</label>
+                                    <div class="slider-container">
+                                        <input type="range" class="form-range" id="critterScale" min="0" max="300" value="100">
+                                        <span id="critterScaleValue">1.00</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h2 class="mb-0">Card Details</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="playNote" class="form-label">Play Note</label>
+                                <input type="text" class="form-control" id="playNote">
+                                <div class="form-text">Short text that appears at the top of the card.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="power" class="form-label">Power</label>
+                                <textarea class="form-control" id="power" rows="4"></textarea>
+                                <div class="form-text">Use keywords like "Berry", "Twig", etc., for automatic icon
+                                    insertion.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h2 class="mb-0">Background Image</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="backgroundUpload" class="form-label">Upload Image</label>
+                                <input type="file" class="form-control" id="backgroundUpload" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Background X Offset</label>
+                                <div class="slider-container">
+                                    <input type="range" class="form-range" id="bgXOffset" min="-300" max="300" value="0">
+                                    <span id="bgXOffsetValue">0</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Background Y Offset</label>
+                                <div class="slider-container">
+                                    <input type="range" class="form-range" id="bgYOffset" min="-300" max="300" value="0">
+                                    <span id="bgYOffsetValue">0</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Background Scale</label>
+                                <div class="slider-container">
+                                    <input type="range" class="form-range" id="bgScale" min="0" max="300" value="100">
+                                    <span id="bgScaleValue">1.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h2 class="mb-0">Card Preview</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-preview-container">
+                            <canvas id="cardPreview" width="544" height="741" class="border"></canvas>
+                            <div class="card-overlay"></div>
+                        </div>
+                        <a id="downloadLink" class="btn btn-primary mt-3 w-100" download="custom_card.png">Download
+                            Card</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    y>
+
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const canvas = document.getElementById('cardPreview');
+const ctx = canvas.getContext('2d');
+const downloadLink = document.getElementById('downloadLink');
+
+const bgXOffsetSlider = document.getElementById('bgXOffset');
+const bgYOffsetSlider = document.getElementById('bgYOffset');
+const bgScaleSlider = document.getElementById('bgScale');
+const bgXOffsetValue = document.getElementById('bgXOffsetValue');
+const bgYOffsetValue = document.getElementById('bgYOffsetValue');
+const bgScaleValue = document.getElementById('bgScaleValue');
+
+function adjustNumber(id, change) {
+    const input = document.getElementById(id);
+    let value = parseInt(input.value) + change;
+    value = Math.max(parseInt(input.min), Math.min(parseInt(input.max), value));
+    input.value = value;
+    updateJSON();
+}
+
+const critterXOffsetSlider = document.getElementById('critterXOffset');
+const critterYOffsetSlider = document.getElementById('critterYOffset');
+const critterScaleSlider = document.getElementById('critterScale');
+const critterXOffsetValue = document.getElementById('critterXOffsetValue');
+const critterYOffsetValue = document.getElementById('critterYOffsetValue');
+const critterScaleValue = document.getElementById('critterScaleValue');
+
+critterXOffsetSlider.addEventListener('input', function() {
+    critterXOffsetValue.textContent = this.value;
+    updateJSON();
+});
+
+critterYOffsetSlider.addEventListener('input', function() {
+    critterYOffsetValue.textContent = this.value;
+    updateJSON();
+});
+
+critterScaleSlider.addEventListener('input', function() {
+    critterScaleValue.textContent = (this.value / 100).toFixed(2);
+    updateJSON();
+});
+
+function updateJSON() {
+    const jsonData = {
+        victoryPoints: parseInt(document.getElementById('victoryPoints').value),
+        copies: parseInt(document.getElementById('copies').value),
+        title: document.getElementById('title').value,
+        playNote: document.getElementById('playNote').value,
+        rarity: document.querySelector('input[name="rarity"]:checked').id,
+        cardType: document.querySelector('input[name="cardType"]:checked').id,
+        type: document.querySelector('input[name="type"]:checked').id,
+        backgroundXOffset: parseInt(document.getElementById('bgXOffset').value),
+        backgroundYOffset: parseInt(document.getElementById('bgYOffset').value),
+        backgroundScale: parseFloat(document.getElementById('bgScale').value) / 100,
+        power: document.getElementById('power').value
+    };
+
+    if (jsonData.type === 'destination') {
+        jsonData.open = document.getElementById('open').checked;
+        jsonData.frogAmbassador = document.getElementById('frogAmbassador').checked;
+    }
+
+    if (jsonData.type === 'prosperity') {
+        jsonData.reward = parseInt(document.getElementById('prosperityReward').value);
+    }
+
+    if (jsonData.cardType === 'critter') {
+        jsonData.berryCost = parseInt(document.getElementById('berryCost').value);
+        jsonData.linkedConstruction = document.getElementById('linkedConstruction').value;
+        jsonData.quote = document.getElementById('quote').value;
+    } else { // construction
+        jsonData.critterImageXOffset = parseInt(document.getElementById('critterXOffset').value);
+        jsonData.critterImageYOffset = parseInt(document.getElementById('critterYOffset').value);
+        jsonData.critterImageScale = parseFloat(document.getElementById('critterScale').value) / 100;
+        jsonData.cost = {
+            twigs: parseInt(document.getElementById('twigsCost').value),
+            resin: parseInt(document.getElementById('resinCost').value),
+            pebble: parseInt(document.getElementById('pebbleCost').value)
+        };
+        jsonData.linkedCritter = document.getElementById('linkedCritter').value;
+    }
+
+    generateCard(jsonData);
+}
+
+
+bgXOffsetSlider.addEventListener('input', function() {
+    bgXOffsetValue.textContent = this.value;
+    updateJSON();
+});
+
+bgYOffsetSlider.addEventListener('input', function() {
+    bgYOffsetValue.textContent = this.value;
+    updateJSON();
+});
+
+bgScaleSlider.addEventListener('input', function() {
+    bgScaleValue.textContent = (this.value / 100).toFixed(2);
+    updateJSON();
+});
+
+function updateDownloadLink() {
+    downloadLink.href = canvas.toDataURL('image/png');
+}
+
+// Event listeners
+document.getElementById('cardForm').addEventListener('input', updateJSON);
+document.getElementById('cardForm').addEventListener('change', updateJSON);
+
+// Toggle between Critter and Construction options
+document.getElementById('critter').addEventListener('change', function() {
+    document.getElementById('critterOptions').style.display = 'block';
+    document.getElementById('constructionOptions').style.display = 'none';
+    updateJSON();
+});
+
+document.getElementById('construction').addEventListener('change', function() {
+    document.getElementById('critterOptions').style.display = 'none';
+    document.getElementById('constructionOptions').style.display = 'block';
+    updateJSON();
+});
+
+document.querySelectorAll('input[name="type"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        const isDestination = (this.id === 'destination');
+        document.getElementById('destinationOptions').style.display = isDestination ? 'block' : 'none';
+        updateJSON();
+    });
+});
+
+document.querySelectorAll('input[name="type"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        const isProsperity = (this.id === 'prosperity');
+        const isDestination = (this.id === 'destination');
+        document.getElementById('prosperityOptions').style.display = isProsperity ? 'block' : 'none';
+        document.getElementById('destinationOptions').style.display = isDestination ? 'block' : 'none';
+        updateJSON();
+    });
+});
+
+
+// Toggle Reward input for Prosperity type
+document.querySelector('input[name="type"][id="prosperity"]').addEventListener('change', function() {
+    document.getElementById('critterRewardDiv').style.display = 'block';
+    updateJSON();
+});
+
+document.querySelectorAll('input[name="type"]:not([id="prosperity"])').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        document.getElementById('critterRewardDiv').style.display = 'none';
+        updateJSON();
+    });
+});
+
+document.getElementById('critterImageUpload').addEventListener('change', updateJSON);
+
+// Update linked fields based on rarity
+document.querySelectorAll('input[name="rarity"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        const isLegendary = this.id === 'legendary';
+        const linkedConstructionLabel = document.querySelector('label[for="linkedConstruction"]');
+        const linkedCritterLabel = document.querySelector('label[for="linkedCritter"]');
+
+        linkedConstructionLabel.textContent = isLegendary ? 'Linked Critter' : 'Linked Construction';
+        linkedCritterLabel.textContent = isLegendary ? 'Linked Construction' : 'Linked Critter';
+        updateJSON();
+    });
+});
+
+// Modify the place_image function to handle background scaling
+function place_image(img, x, y, width, scale = 1) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = function() {
+            if (width) {
+                const height = (width / image.width) * image.height;
+                ctx.drawImage(image, x, y, width * scale, height * scale);
+            } else {
+                ctx.drawImage(image, x, y, image.width * scale, image.height * scale);
+            }
+            resolve();
+        };
+        image.onerror = reject;
+        image.src = img;
+    });
+}
+
+function loadFont(fontUrl) {
+    return new FontFace('UnicaDis', `url(${fontUrl})`).load().then(font => {
+        document.fonts.add(font);
+        return font;
+    });
+}
+
+
+async function drawCenteredTitle(title, x, y, fontSize) {
+    // Try to load the font
+    try {
+        await loadFont('./fonts/UnicaDis.woff');
+    } catch (err) {
+        console.error('Failed to load custom font:', err);
+        // Fallback to a system font if custom font fails to load
+    }
+
+    ctx.font = `${fontSize}px UnicaDis, sans-serif`;
+
+    // Measure the text width
+    let textWidth = ctx.measureText(title).width;
+
+    // Check if the text is too wide for the card
+    const maxWidth = 190;
+    if (textWidth > maxWidth) {
+        // If too wide, reduce font size until it fits
+        while (textWidth > maxWidth && fontSize > 10) {
+            fontSize--;
+            ctx.font = `${fontSize}px UnicaDis, sans-serif`;
+            textWidth = ctx.measureText(title).width;
+        }
+    }
+
+    // Draw the text
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'black';
+    ctx.fillText(title, x, y + 2, maxWidth);
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'white';
+    ctx.fillText(title, x, y, maxWidth);
+}
+
+async function drawLinkedCritterImage(data) {
+
+    const critterImageUpload = document.getElementById('critterImageUpload');
+    if (critterImageUpload.files && critterImageUpload.files[0]) {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // Create a temporary canvas for the circular mask
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = 70;
+                tempCanvas.height = 70;
+
+                // Draw the circular mask
+                tempCtx.beginPath();
+                tempCtx.arc(35, 35, 35, 0, Math.PI * 2);
+                tempCtx.closePath();
+                tempCtx.clip();
+
+                // Calculate the scaling and positioning
+                const scale = data.critterImageScale;
+                const xOffset = data.critterImageXOffset;
+                const yOffset = data.critterImageYOffset;
+
+
+                // Draw the image on the temporary canvas
+                tempCtx.drawImage(img, xOffset, yOffset, 70 * scale, (img.height / img.width) * 70 * scale);
+
+                // Apply a blur effect
+
+                tempCtx.drawImage(tempCanvas, 0, 0);
+
+                // Draw the circular image on the main canvas
+                ctx.drawImage(tempCanvas, 435, 640);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(critterImageUpload.files[0]);
+    } else {
+        //draw a black circle.
+        await place_image('./occupied.png', 435, 639, 68, data.critterImageScale);
+    }
+}
+
+async function loadFonts() {
+    try {
+        await loadFont('./fonts/Plantin Infant MT Std Italic.woff');
+    } catch (err) {
+        console.error('Failed to load custom font:', err);
+        // Font loading failed, we'll use a fallback font
+    }
+    try {
+        await loadFont('./fonts/UnicaDis.woff');
+    } catch (err) {
+        console.error('Failed to load custom font:', err);
+        // Font loading failed, we'll use a fallback font
+    }
+}
+
+loadFonts();
+
+async function writeText(text, x, y, maxWidth, fontSize, hexColorString, letterSpacing = 0) {
+    // Ensure the font is loaded
+
+    ctx.font = `${fontSize}px UnicaDis, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = hexColorString;
+
+
+    // Function to measure text width with letter spacing
+    function getTextWidth(text, letterSpacing) {
+        return text.split('').reduce((width, char, index) => {
+            return width + ctx.measureText(char).width + (index > 0 ? letterSpacing : 0);
+        }, 0);
+    }
+
+
+    // Measure the text width with letter spacing
+    let textWidth = getTextWidth(text, letterSpacing);
+
+    // If text is too wide, reduce font size until it fits
+    while (textWidth > maxWidth && fontSize > 10) {
+        fontSize--;
+        ctx.font = `${fontSize}px UnicaDis, sans-serif`;
+        textWidth = getTextWidth(text, letterSpacing);
+    }
+
+    // Calculate the starting x position to center the text
+    let startX = x - textWidth / 2;
+
+    // Draw each character with the specified letter spacing
+    text.split('').forEach((char, index) => {
+        const charWidth = ctx.measureText(char).width;
+        ctx.fillText(char, startX + charWidth / 2, y);
+        startX += charWidth + letterSpacing;
+    });
+}
+
+// Function to measure text width with letter spacing
+function getTextWidth(text, letterSpacing) {
+    return text.split('').reduce((width, char, index) => {
+        return width + ctx.measureText(char).width + (index > 0 ? letterSpacing : 0);
+    }, 0);
+}
+
+
+
+
+async function writeQuote(text, x, y, maxWidth, fontSize, hexColorString, letterSpacing = 0) {
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = hexColorString;
+
+    // Function to measure text width with letter spacing
+    function getTextWidth(text, letterSpacing) {
+        return text.split('').reduce((width, char, index) => {
+            return width + ctx.measureText(char).width + (index > 0 ? letterSpacing : 0);
+        }, 0);
+    }
+
+    // Process the text to handle bold sections
+    let processedText = [];
+    let currentSegment = '';
+    let isBold = false;
+
+    for (let i = 0; i < text.length; i++) {
+        if (text[i] === '|') {
+            if (currentSegment) {
+                processedText.push([currentSegment, isBold]);
+                currentSegment = '';
+            }
+            isBold = !isBold;
+        } else {
+            currentSegment += text[i];
+        }
+    }
+    if (currentSegment) {
+        processedText.push([currentSegment, isBold]);
+    }
+
+    // Function to draw "bold" text
+    function drawBoldText(char, x, y) {
+        const offset = fontSize * 0.03; // Adjust for desired boldness
+        ctx.fillText(char, x - offset, y);
+        ctx.fillText(char, x + offset, y);
+        ctx.fillText(char, x, y); // Original position
+    }
+
+    // Measure the total text width
+    ctx.font = `${fontSize}px "Plantin Infant MT Std"`;
+    let totalWidth = processedText.reduce((width, [segment, _]) => {
+        return width + getTextWidth(segment, letterSpacing);
+    }, 0);
+
+    // If text is too wide, reduce font size until it fits
+    while (totalWidth > maxWidth && fontSize > 10) {
+        fontSize--;
+        ctx.font = `${fontSize}px "Plantin Infant MT Std"`;
+        totalWidth = processedText.reduce((width, [segment, _]) => {
+            return width + getTextWidth(segment, letterSpacing);
+        }, 0);
+    }
+
+    // Calculate the starting x position to center the text
+    let startX = x - totalWidth / 2;
+
+    // Draw each segment
+    processedText.forEach(([segment, isBold]) => {
+        segment.split('').forEach((char, index) => {
+            const charWidth = ctx.measureText(char).width;
+            const charX = startX + charWidth / 2;
+
+            if (isBold) {
+                drawBoldText(char, charX, y);
+            } else {
+                ctx.fillText(char, charX, y);
+            }
+
+            startX += charWidth + letterSpacing;
+        });
+    });
+}
+
+
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+// Modified drawIcon function
+async function drawIcon(iconName, x, y) {
+    const width = ['prosperity', 'production', 'destination', 'traveller'].includes(iconName) || iconName.includes('point') ? 28 : iconName.includes('star') ? 15 : iconName.includes('governance') ? 24 : 23; // Default width, can be adjusted
+    const xOffset = -3; // Default x offset, can be adjusted
+    const yOffset = 0; // Default y offset, can be adjusted
+
+    const iconPath = `./rules/${iconMapping[iconName.toLowerCase()]}`;
+    try {
+        const icon = await loadImage(iconPath);
+        ctx.drawImage(icon, x + xOffset, y + yOffset - width / 2, width, width);
+        return width; // Return the width of the icon
+    } catch (error) {
+        console.error(`Failed to load icon: ${iconName}`, error);
+        // If icon fails to load, draw a placeholder or the text itself
+        ctx.fillText(iconName, x, y);
+        return ctx.measureText(iconName).width;
+    }
+}
+
+function downloadCanvas() {
+    // Convert the canvas to a data URL
+    const dataURL = canvas.toDataURL('image/png');
+
+    // Create a temporary link element
+    const downloadElement = document.createElement('a');
+
+    // Set the href to the canvas data URL
+    downloadElement.href = dataURL;
+
+    // Set the download attribute with the desired file name
+    downloadElement.download = 'custom_card.png';
+
+    // Append the link to the body
+    document.body.appendChild(downloadElement);
+
+    // Programmatically click the link to trigger the download
+    downloadElement.click();
+
+    // Remove the link from the body
+    document.body.removeChild(downloadElement);
+}
+
+document.getElementById('downloadLink').addEventListener('click', downloadCanvas);
+
+
+const iconMapping = {
+    'production': 'production.png',
+    'green': 'production.png',
+    'destination': 'destination.png',
+    'governance': 'governance.png',
+    'red': 'destination.png',
+    'traveller': 'traveller.png',
+    'brown': 'traveller.png',
+    'token': 'point.png',
+    'prosperity': 'prosperity.png',
+    'purple': 'prosperity.png',
+    '1point': '1point.png',
+    '2point': '2point.png',
+    '3point': '3point.png',
+    '4point': '4point.png',
+    'berry': 'berry.png',
+    'berries': 'berry.png',
+    'card': 'card.png',
+    'cards': 'card.png',
+    'pearl': 'pearl.png',
+    'pearls': 'pearl.png',
+    'pebble': 'pebble.png',
+    'pebbles': 'pebble.png',
+    'point': 'point.png',
+    'resin': 'resin.png',
+    'resource': 'resource.png',
+    'resources': 'resource.png',
+    'star': 'star.png',
+    'twig': 'twig.png',
+    '4player': '4player.png',
+    'workerlocation': 'location.png',
+    'twigs': 'twig.png'
+};
+
+const iconWords = Object.keys(iconMapping);
+
+
+
+
+async function writeRule(text, x, y, maxWidth, fontSize, hexColorString, letterSpacing = 0) {
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = hexColorString;
+
+    // Function to measure text width with letter spacing
+    function getTextWidth(text, letterSpacing) {
+        return text.split('').reduce((width, char, index) => {
+            return width + ctx.measureText(char).width + (index > 0 ? letterSpacing : 0);
+        }, 0);
+    }
+
+    // Process the text to handle bold sections and icons
+    let processedText = [];
+    let currentSegment = '';
+    let isBold = false;
+
+    text.split(/\s+/).forEach(word => {
+        if (iconWords.includes(word.toLowerCase())) {
+            if (currentSegment) {
+                processedText.push([currentSegment, isBold, false]);
+                currentSegment = '';
+            }
+            processedText.push([word, false, true]);
+        } else {
+            word.split('').forEach(char => {
+                if (char === '|') {
+                    if (currentSegment) {
+                        processedText.push([currentSegment, isBold, false]);
+                        currentSegment = '';
+                    }
+                    isBold = !isBold;
+                } else {
+                    currentSegment += char;
+                }
+            });
+            currentSegment += ' ';
+        }
+    });
+
+    if (currentSegment) {
+        processedText.push([currentSegment, isBold, false]);
+    }
+
+    // Function to draw "bold" text
+    function drawBoldText(char, x, y) {
+        const offset = fontSize * 0.03; // Adjust for desired boldness
+        ctx.fillText(char, x - offset, y);
+        ctx.fillText(char, x + offset, y);
+        ctx.fillText(char, x, y); // Original position
+    }
+
+    // Measure the total text width
+    ctx.font = `${fontSize}px "IowanOldSt BT"`;
+    let totalWidth = 0;
+    for (let [segment, _, isIcon] of processedText) {
+        if (isIcon) {
+            totalWidth += fontSize; // Assume icon width is roughly equal to font size
+        } else {
+            totalWidth += getTextWidth(segment, letterSpacing);
+        }
+    }
+
+    // If text is too wide, reduce font size until it fits
+    while (totalWidth > maxWidth && fontSize > 10) {
+        fontSize--;
+        ctx.font = `${fontSize}px "IowanOldSt BT"`;
+        totalWidth = 0;
+        for (let [segment, _, isIcon] of processedText) {
+            if (isIcon) {
+                totalWidth += fontSize;
+            } else {
+                totalWidth += getTextWidth(segment, letterSpacing);
+            }
+        }
+    }
+
+    // Calculate the starting x position to center the text
+    let startX = x - totalWidth / 2;
+
+    // Draw each segment
+    for (let [segment, isBold, isIcon] of processedText) {
+        if (isIcon) {
+            const iconWidth = await drawIcon(segment, startX, y);
+            startX += iconWidth;
+        } else {
+            segment.split('').forEach((char, index) => {
+                const charWidth = ctx.measureText(char).width;
+                const charX = startX + charWidth / 2;
+
+                if (isBold) {
+                    drawBoldText(char, charX, y);
+                } else {
+                    ctx.fillText(char, charX, y);
+                }
+
+                startX += charWidth + letterSpacing;
+            });
+        }
+    }
+}
+
+
+
+
+async function drawMultilineRule(lines, x, y, width, height, initialFontSize, hexColorString, letterSpacing = 0) {
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = hexColorString;
+
+    let fontSize = initialFontSize;
+    let lineHeight = fontSize * 1.5; // Increased line height multiplier
+
+    function measureLine(line, fontSize) {
+        ctx.font = `${fontSize}px "IowanOldSt BT"`;
+        return line.split(' ').reduce((totalWidth, word) => {
+            if (iconWords.includes(word.toLowerCase())) {
+                return totalWidth + fontSize; // Assume icon width is roughly equal to font size
+            } else {
+                return totalWidth + ctx.measureText(word).width + (totalWidth > 0 ? ctx.measureText(' ').width : 0);
+            }
+        }, 0);
+    }
+
+    // Function to check if all lines fit within the bounding box
+    function checkFit(lines, fontSize) {
+        const lineHeight = fontSize * 1.5; // Use the same multiplier here
+        const totalHeight = lineHeight * lines.length;
+        if (totalHeight > height) return false;
+
+        return lines.every(line => measureLine(line, fontSize) <= width);
+    }
+
+    // Reduce font size until all lines fit
+    while (!checkFit(lines, fontSize) && fontSize > 5) {
+        fontSize--;
+        lineHeight = fontSize * 1.5; // Update line height as font size changes
+    }
+
+    // If text still doesn't fit at minimum font size, truncate lines
+    if (fontSize <= 5) {
+        while (lines.length * lineHeight > height) {
+            lines.pop();
+        }
+    }
+
+    // Calculate the total height of the text block
+    const totalTextHeight = lines.length * lineHeight;
+
+    // Calculate the starting Y position to center the entire text block vertically
+    let startY = y + (height - totalTextHeight) / 2;
+
+    // Adjust startY to account for the extra half line height
+    startY += lineHeight / 2;
+
+    // Draw each line
+    for (let i = 0; i < lines.length; i++) {
+        const lineY = startY + i * lineHeight;
+        await writeRule(lines[i], x + width / 2, lineY, width, fontSize, hexColorString, letterSpacing);
+    }
+}
+
+
+
+async function add_main_rule(data) {
+    let ruleY = 500; // Default Y position
+    let ruleHeight = 120; // Default height
+
+    let ruleX = 102
+    let ruleWidth = 340
+
+    if (data.playNote !== '') {
+        ruleY += 30; // Adjust Y position if there's a play note
+        ruleHeight -= 30; // Reduce available height
+    }
+
+    if (data.type === 'destination') {
+        ruleY += 70; // Further adjust Y position for destination and prosperity cards
+        ruleHeight -= 70; // Further reduce available height
+    }
+
+    if (data.type == 'destination' && data.playNote == '') {
+        if (data.frogAmbassador) {
+            await place_image('./frog.png', -10, 0, 620);
+        } else {
+            await place_image('./paw.png', -10, 0, 620);
+        }
+    } else if (data.type == 'destination') {
+        if (data.frogAmbassador) {
+            await place_image('./frog.png', -10, 30, 620);
+        } else {
+            await place_image('./paw.png', -10, 30, 620);
+        }
+    }
+
+    if (data.type == 'prosperity') {
+        ruleY += 55; // Further adjust Y position for prosperity 
+        ruleHeight -= 55; // Further reduce available height
+        await place_image('./prosp/base.png', 246, ruleY - 50, 50);
+        await writeRule('|' + data.reward.toString() + '|', 274, ruleY - 22, 50, 28, '#5c3410', 1.3);
+    }
+
+    if (data.cardType === 'construction') {
+        ruleHeight += 30;
+    }
+
+
+    // Split the power text into lines
+    const lines = data.power.split('\n');
+    // Draw the multi-line rule
+    await drawMultilineRule(lines, ruleX, ruleY, ruleWidth, ruleHeight, 20, '#5c3410', 1.3);
+}
+
+
+
+
+async function build_critter(data) {
+
+    await placeScaledImage('./base/base_critter.png');
+    addType(data.type);
+    addBerryCost(data.berryCost);
+
+    if (data.rarity == 'legendary') {
+
+    } else {
+        await addChain(data.linkedConstruction);
+    }
+
+    if (data.quote != '') {
+        await writeQuote('"' + data.quote + '"', 278, 642, 315, 13, '#5c3410', 1.3);
+    }
+
+    // Add more critter-specific elements here
+}
+
+async function build_construction(data) {
+
+
+    await placeScaledImage('./base/base_construction.png');
+
+    addType(data.type, false);
+
+    addTwigCost(data.cost.twigs);
+    addResinCost(data.cost.resin);
+    addPebbleCost(data.cost.pebble);
+
+    await addCritterChain(data.linkedCritter);
+
+    await drawLinkedCritterImage(data);
+
+    // Add more construction-specific elements here
+}
+
+async function addCritterChain(linkedCritter) {
+    if (linkedCritter != '') {
+        await writeText(linkedCritter, 368, 683, 90, 14.4, '#ffffff', 1.3);
+    }
+}
+
+async function placeScaledImage(img) {
+    await place_image(img, 0, 0, 620);
+}
+
+async function build_card(data) {
+
+
+    const backgroundUpload = document.getElementById('backgroundUpload');
+    if (backgroundUpload.files && backgroundUpload.files[0]) {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            await place_image(e.target.result, data.backgroundXOffset, data.backgroundYOffset, canvas.width, data.backgroundScale);
+            await build_card_content(data);
+        }
+        reader.readAsDataURL(backgroundUpload.files[0]);
+    } else {
+        await build_card_content(data);
+    }
+}
+
+// Create a new function to handle the rest of the card content
+async function build_card_content(data) {
+    if (data.cardType === 'critter') {
+        await build_critter(data);
+    } else {
+        await build_construction(data);
+    }
+    await addPoints(data.victoryPoints);
+
+    if (data.copies == 3) {
+        await placeScaledImage('./three.png');
+    }
+
+    if (data.type == 'destination' && data.open) {
+        await placeScaledImage('./base/open.png');
+    }
+
+    await addRarity(data.rarity, data.cardType === 'critter');
+
+    await drawCenteredTitle(data.title, 302, 449, 30);
+
+    await add_play_note(data.playNote);
+
+    await add_main_rule(data);
+
+
+}
+
+async function add_play_note(playNote) {
+    if (playNote != '') {
+
+        await placeScaledImage('./playnote.png');
+        await writeQuote(playNote, 282, 515, 245, 15.7, '#5c3410', 1.3);
+    }
+}
+
+async function addType(type) {
+    switch (type) {
+        case 'production':
+            await placeScaledImage('./type/production.png');
+            break;
+        case 'traveller':
+            await placeScaledImage('./type/traveller.png');
+            break;
+        case 'prosperity':
+            await placeScaledImage('./type/prosperity.png');
+            break;
+        case 'destination':
+            await placeScaledImage('./type/destination.png');
+            break;
+        case 'governance':
+            await placeScaledImage('./type/governance.png');
+            break;
+    }
+}
+
+async function addRarity(rarity, isCritter) {
+    const text = (rarity + (isCritter ? ' critter' : ' construction')).toUpperCase();
+    const textColor = '#5c3410'
+
+
+    writeText(text, 305, 485, 195, 15.7, textColor, 1.3);
+}
+
+async function addBerryCost(cost) {
+    switch (cost) {
+        case 2:
+            await placeScaledImage('./cost/2berry.png');
+            break;
+
+        case 3:
+            await placeScaledImage('./cost/3berry.png');
+            break;
+
+        case 4:
+            await placeScaledImage('./cost/4berry.png');
+            break;
+
+        case 5:
+            await placeScaledImage('./cost/5berry.png');
+            break;
+
+        case 6:
+            await placeScaledImage('./cost/6berry.png');
+            break;
+    }
+}
+
+async function addTwigCost(cost) {
+    if (cost < 1) return;
+    await placeScaledImage('./cost/1twig.png');
+    switch (cost) {
+        case 2:
+            await placeScaledImage('./cost/2twig.png');
+            break;
+
+        case 3:
+            await placeScaledImage('./cost/3twig.png');
+            break;
+
+        case 4:
+            await placeScaledImage('./cost/4twig.png');
+            break;
+    }
+}
+
+async function addChain(linkedConstruction) {
+    await placeScaledImage('./chain.png');
+    if (linkedConstruction != '') {
+        await writeText(linkedConstruction, 128, 66, 105, 16, '#ebcd9c', 1.3);
+    }
+}
+
+async function addResinCost(cost) {
+    if (cost < 1) return;
+    await placeScaledImage('./cost/1resin.png');
+    switch (cost) {
+        case 2:
+            await placeScaledImage('./cost/2resin.png');
+            break;
+
+        case 3:
+            await placeScaledImage('./cost/3resin.png');
+            break;
+
+        case 4:
+            await placeScaledImage('./cost/4resin.png');
+            break;
+    }
+}
+
+async function addPebbleCost(cost) {
+    if (cost < 1) return;
+    await placeScaledImage('./cost/1pebble.png');
+    switch (cost) {
+        case 2:
+            await placeScaledImage('./cost/2pebble.png');
+            break;
+
+        case 3:
+            await placeScaledImage('./cost/3pebble.png');
+            break;
+
+        case 4:
+            await placeScaledImage('./cost/4pebble.png');
+            break;
+    }
+}
+
+async function addPoints(vps) {
+    if (vps == 0) {
+        await place_image('./points/0.png', 394, 383, 102)
+    } else if (vps == 1) {
+        await placeScaledImage('./points/1.png');
+    } else if (vps == 2) {
+        await placeScaledImage('./points/2.png');
+    } else if (vps == 3) {
+        await placeScaledImage('./points/3.png');
+    } else if (vps == 4) {
+        await placeScaledImage('./points/4.png');
+    } else if (vps == 5) {
+        await placeScaledImage('./points/5.png');
+    } else if (vps == 6) {
+        await placeScaledImage('./points/star.png');
+    } else if (vps == -2) {
+        await placeScaledImage('./points/-2.png');
+    }
+}
+async function generateCard(data) {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    canvas.style.visibility = 'hidden';
+
+    await build_card(data);
+
+    canvas.style.visibility = 'visible';
+
+    //updateDownloadLink();
+}
+
+// Initial update
+updateJSON();
+</script>
+</body>
+
+</html>
